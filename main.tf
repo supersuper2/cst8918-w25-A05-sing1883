@@ -134,7 +134,7 @@ resource "azurerm_linux_virtual_machine" "main" {
   ]
   admin_ssh_key {
     username   = var.admin_username
-    public_key = file("~/.ssh/id_rsa.pub")
+    public_key = file("/home/sim/.ssh/id_rsa.pub")
   }
 
   os_disk {
@@ -150,7 +150,7 @@ resource "azurerm_linux_virtual_machine" "main" {
     version   = "latest"
   }
 
-  custom_data = data.cloudinit_config.apache.rendered
+  custom_data = filebase64("${path.module}/init.sh")
 }
 
 output "resource_group_name" {
