@@ -43,3 +43,21 @@ variable "admin_username" {
   default     = "azureadmin"
 }
 
+resource "azurerm_resource_group" "main" {
+  name     = "${var.labelPrefix}-A05-RG"
+  location = var.region
+}
+
+resource "azurerm_public_ip" "main" {
+  name                = "${var.labelPrefix}-A05-PublicIP"
+  location            = azurerm_resource_group.main.location
+  resource_group_name = azurerm_resource_group.main.name
+  allocation_method   = "Dynamic"
+}
+
+resource "azurerm_virtual_network" "main" {
+  name                = "${var.labelPrefix}-A05-VNet"
+  address_space       = ["10.0.0.0/16"]
+  location            = azurerm_resource_group.main.location
+  resource_group_name = azurerm_resource_group.main.name
+}
